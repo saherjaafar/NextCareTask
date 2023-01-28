@@ -1,0 +1,95 @@
+.datatable-btn-space{
+    margin-left: 15px;
+}
+
+.btn-submit-space{
+    margin-right: 15px;
+}
+
+.selectBorderRed{
+    border-color: #ff0000 !important;
+}
+
+.dropzoneDz{
+    border: 2px dashed #ced4da;
+    background: #fff;
+    border-radius: 6px;
+}
+
+.dropzoneDz-Internal{
+    text-align: center;
+    padding: 30px;
+}
+
+.align-center{
+    text-align: center !important;
+}
+
+
+
+.width100{
+    width: 100% !important;
+}
+
+.react-datepicker-wrapper{
+    width: 100% !important;
+}
+
+.rdt_TableHeader{
+    display: none !important;
+}
+
+.justify-content{
+    justify-content: center !important;
+}
+
+.intl-tel-input{
+    width: 100% !important;
+}
+
+.hidden{
+    visibility: hidden !important;
+}
+
+.place-content-center{
+    place-content: center !important;
+}
+
+.text-align-last{
+    text-align-last: center !important;
+}
+
+.text-align-center{
+    text-align: center !important;
+}
+
+.hidden{
+    visibility: hidden !important;
+}
+
+
+/* Margin ///////////////////////////////////////////////////////*/
+.margin-right-20{
+    margin-right: 15px !important;
+}
+
+.margin-top-15{
+margin-top: 15px !important;
+}
+
+/* Padding ///////////////////////////////////////////////////////*/
+.padding10{
+    padding: 10px !important;
+}
+
+.padding35{
+    padding: 35px !important;
+}
+
+.paddingLeft35{
+    padding-left: 35px !important;
+}
+
+.paddingRight35{
+    padding-right: 35px !important;
+}
