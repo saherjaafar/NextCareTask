@@ -206,51 +206,70 @@ function Admission() {
   };
 
   const GetByCardNumber = (reload) => {
-    if (reload == true) {
-      setLoader(true);
-    }
-    fetch(Variables.API_URL + "Insured/cardnumber/" + formData.CardNumber, {
-      method: "Get",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + jwt,
-      },
-    })
-      .then((Response) => {
-        if (Response.ok) {
-          return Response.json();
-        }
-        return Response.text().then((text) => {
-          throw new Error(text);
-        });
-      })
-      .then((Result) => {
-        console.log("Result", Result);
-        setFormData((prevState) => ({
-          ...prevState,
-          ["Insured"]: {
-            FullName: Result.FullName,
-            DOB: Result.StrDob,
-            Gender: Result.Gender,
-          },
-        }));
-        setLoader(false);
-      })
-      .catch((error) => {
-        setFormData((prevState) => ({
-          ...prevState,
-          ["Insured"]: {
-            FullName: "",
-            DOB: "",
-            Gender: "",
-          },
-        }));
-        setCardError({
-          Error: true,
-          Message: error.message,
-        });
+    if (
+      formData.CardNumber == "" ||
+      formData.CardNumber == null ||
+      /[^0-9a-zA-Z]/.test(formData.CardNumber) ||
+      formData.CardNumber.length != 16
+    ) {
+      var element = document.getElementById("CardNumber");
+      element.classList.add("is-invalid");
+      element.focus();
+      setCardError({
+        Error: true,
+        Message: "Card Number must be 16 characters alphanumeric.",
       });
+    } else {
+      if (reload == true) {
+        setLoader(true);
+      }
+      fetch(Variables.API_URL + "Insured/cardnumber/" + formData.CardNumber, {
+        method: "Get",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + jwt,
+        },
+      })
+        .then((Response) => {
+          if (Response.ok) {
+            return Response.json();
+          }
+          return Response.text().then((text) => {
+            throw new Error(text);
+          });
+        })
+        .then((Result) => {
+          var element = document.getElementById("CardNumber");
+          element.classList.remove("is-invalid");
+          element.focus();
+          setFormData((prevState) => ({
+            ...prevState,
+            ["Insured"]: {
+              InsuredId: Result.Id,
+              FullName: Result.FullName,
+              DOB: Result.StrDob,
+              Gender: Result.Gender,
+            },
+          }));
+          setLoader(false);
+        })
+        .catch((error) => {
+          setFormData((prevState) => ({
+            ...prevState,
+            ["Insured"]: {
+              InsuredId: 0,
+              FullName: "",
+              DOB: "",
+              Gender: "",
+            },
+          }));
+          setCardError({
+            Error: true,
+            Message: error.message,
+          });
+        });
+    }
   };
 
   const Add = () => {
@@ -456,7 +475,13 @@ function Admission() {
   function IsValid() {
     var hasError = false;
     var element;
-    if (formData.CardNumber == "" || formData.CardNumber == null) {
+    if (
+      formData.CardNumber == "" ||
+      formData.CardNumber == null ||
+      /[^0-9a-zA-Z]/.test(formData.CardNumber) ||
+      formData.CardNumber.length != 16 ||
+      formData.Insured.InsuredId == 0
+    ) {
       element = document.getElementById("CardNumber");
       element.classList.add("is-invalid");
       element.focus();
@@ -521,7 +546,8 @@ function Admission() {
     if (admissionId != 0) {
       GetAdmission();
     }
-  }, [admissionId]);
+  }, [admissionId, formData]);
+  console.log("ss");
 
   return (
     <Fragment>

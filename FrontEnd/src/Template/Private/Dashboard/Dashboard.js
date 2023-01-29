@@ -1,6 +1,14 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { useNavigate } from "react-router-dom";
-import { Row, Col, Card, Breadcrumb, Button, Form } from "react-bootstrap";
+import {
+  Row,
+  Col,
+  Card,
+  Breadcrumb,
+  Button,
+  Form,
+  Spinner,
+} from "react-bootstrap";
 import Util from "../../../Utilities/Util";
 import { Variables } from "../../../Variables/Variables";
 import Multiselect from "react-select";
@@ -22,6 +30,9 @@ function Dashboard() {
   );
 
   document.title = "Admissions - NextCare-Task";
+
+  const [excelLoader, setExcelLoader] = useState(false);
+  const [pdfLoader, setPdfLoader] = useState(false);
 
   //#region Variable
 
@@ -291,6 +302,98 @@ function Dashboard() {
       });
   };
 
+  const ExportToExcel = () => {
+    setExcelLoader(true);
+    fetch(Variables.API_URL + "Admission/ExportToExcel", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + jwt,
+      },
+      body: JSON.stringify({
+        Addmissions: admissions,
+      }),
+    })
+      .then((Response) => {
+        if (Response.ok) {
+          return Response.blob();
+        }
+        return Response.text().then((text) => {
+          throw new Error(text);
+        });
+      })
+      .then((Result) => {
+        const url = window.URL.createObjectURL(new Blob([Result]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "Admissions.xlsx");
+        document.body.appendChild(link);
+        link.click();
+        setExcelLoader(false);
+      })
+      .catch((error) => {
+        setExcelLoader(false);
+
+        toast.error(
+          <p className="mx-2 tx-16 d-flex align-items-center mb-0 ">
+            {error.message}
+          </p>,
+          {
+            position: toast.POSITION.TOP_RIGHT,
+            hideProgressBar: true,
+            theme: "colored",
+          }
+        );
+      });
+  };
+
+  const ExportToPdf = () => {
+    setPdfLoader(true);
+    fetch(Variables.API_URL + "Admission/ExportToPdf", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + jwt,
+      },
+      body: JSON.stringify({
+        Addmissions: admissions,
+      }),
+    })
+      .then((Response) => {
+        if (Response.ok) {
+          return Response.blob();
+        }
+        return Response.text().then((text) => {
+          throw new Error(text);
+        });
+      })
+      .then((Result) => {
+        const url = window.URL.createObjectURL(new Blob([Result]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "Admissions.pdf");
+        document.body.appendChild(link);
+        link.click();
+        setPdfLoader(false);
+      })
+      .catch((error) => {
+        setPdfLoader(false);
+
+        toast.error(
+          <p className="mx-2 tx-16 d-flex align-items-center mb-0 ">
+            {error.message}
+          </p>,
+          {
+            position: toast.POSITION.TOP_RIGHT,
+            hideProgressBar: true,
+            theme: "colored",
+          }
+        );
+      });
+  };
+
   //#endregion
 
   useEffect(() => {
@@ -320,6 +423,76 @@ function Dashboard() {
               onClick={() => navigate("/Admission/0")}
             >
               <i className="fe fe-plus-circle me-2"></i> Add New Admission
+            </Button>
+            {"  "}
+            <Button
+              variant="primary"
+              type="button"
+              className="my-2 btn-icon-text"
+              onClick={() => ExportToExcel()}
+            >
+              {excelLoader == true ? (
+                <>
+                  <Spinner
+                    as="span"
+                    animation="grow"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                  />
+                  <Spinner
+                    as="span"
+                    animation="grow"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                  />
+                  <Spinner
+                    as="span"
+                    animation="grow"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                  />
+                </>
+              ) : (
+                "Export To excel"
+              )}
+            </Button>
+            {"  "}
+            <Button
+              variant="primary"
+              type="button"
+              className="my-2 btn-icon-text"
+              onClick={() => ExportToPdf()}
+            >
+              {pdfLoader == true ? (
+                <>
+                  <Spinner
+                    as="span"
+                    animation="grow"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                  />
+                  <Spinner
+                    as="span"
+                    animation="grow"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                  />
+                  <Spinner
+                    as="span"
+                    animation="grow"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                  />
+                </>
+              ) : (
+                "Export To Pdf"
+              )}
             </Button>
           </div>
         </div>

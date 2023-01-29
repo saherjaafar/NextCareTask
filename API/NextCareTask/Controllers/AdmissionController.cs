@@ -55,6 +55,25 @@ namespace NextCareTask.Controllers
                 return StatusCode(res.StatusCode, res.Message);
         }
 
+        [HttpPost("ExportToExcel")]
+        public IActionResult ExportToExcel([FromBody] ListAdmissions body)
+        {
+            var content = _unitOfWork.Admissions.ExportToExcel(body);
+            using (var workbook = new XLWorkbook())
+            {
+                using (var stream = new MemoryStream())
+                {
+                    return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Admissions.xlsx");
+                }
+            }
+        }
+
+        [HttpPost("ExportToPdf")]
+        public IActionResult ExportToPdf([FromBody] ListAdmissions body)
+        {
+            var content = _unitOfWork.Admissions.ExportToPdf(body);
+            return content;
+        }
 
         [HttpPut("update")]
         public IActionResult Update([FromBody] ManageAdmission body)
@@ -65,5 +84,7 @@ namespace NextCareTask.Controllers
             else
                 return StatusCode(res.StatusCode, res.Message);
         }
+
+
     }
 }

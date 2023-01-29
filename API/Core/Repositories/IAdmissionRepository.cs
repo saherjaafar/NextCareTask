@@ -2,6 +2,7 @@
 using Core.Models;
 using Core.ViewModels.Admission;
 using Core.ViewModels.Response;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,5 +19,8 @@ namespace Core.Repositories
         TResponseVM<Adminssion> Update(ManageAdmission admission);
         TResponseVM<AdmissionDetails> Get(long admissionId);
         List<Expression<Func<Adminssion, bool>>> GenerateCriterias(long? insuredId, long? statusId, long? hospitalId, long? physicianId, DateTime? startDate, DateTime? endDate);
+
+        public byte[] ExportToExcel(ListAdmissions admissions);
+        public FileContentResult ExportToPdf(ListAdmissions admissions);
     }
 }

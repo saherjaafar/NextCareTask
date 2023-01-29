@@ -1,4 +1,5 @@
-﻿using ClosedXML.Excel;
+﻿using Aspose.Pdf;
+using ClosedXML.Excel;
 using Core.Cache;
 using Core.Consts;
 using Core.Enums;
@@ -6,8 +7,10 @@ using Core.Models;
 using Core.Repositories;
 using Core.ViewModels.Admission;
 using Core.ViewModels.Response;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
@@ -191,22 +194,24 @@ namespace DataAccess.Repositories
 
         public byte[] ExportToExcel(ListAdmissions admissions)
         {
-                using var workbook = new XLWorkbook();
-                var worksheet = workbook.Worksheets.Add("Users");
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("Admissions");
                 var currentRow = 1;
 
-                worksheet.Cell(currentRow, 1).Value = "Admission Date";
+                #region Header
+                worksheet.Cell(currentRow, 1).Value = "Date";
                 worksheet.Cell(currentRow, 2).Value = "Card Number";
                 worksheet.Cell(currentRow, 3).Value = "Name";
-                worksheet.Cell(currentRow, 4).Value = "Hospital";
+                worksheet.Cell(currentRow, 4).Value = "Name";
                 worksheet.Cell(currentRow, 5).Value = "Medical Case";
                 worksheet.Cell(currentRow, 6).Value = "Estimated Cost";
                 worksheet.Cell(currentRow, 7).Value = "Status";
+                #endregion
 
-            foreach (var admission in admissions.Addmissions)
+                foreach (var admission in admissions.Addmissions)
                 {
                     currentRow++;
-
                     worksheet.Cell(currentRow, 1).Value = admission.StrDate;
                     worksheet.Cell(currentRow, 2).Value = admission.CardNumber;
                     worksheet.Cell(currentRow, 3).Value = admission.Insured;
@@ -214,14 +219,69 @@ namespace DataAccess.Repositories
                     worksheet.Cell(currentRow, 5).Value = admission.MedicalCase;
                     worksheet.Cell(currentRow, 6).Value = admission.EstimatedCost;
                     worksheet.Cell(currentRow, 7).Value = admission.Status;
+                }
+
+                using(var stream = new MemoryStream())
+                {
+                    workbook.SaveAs(stream);
+                    var content = stream.ToArray();
+                    return content;
+                }
+            }
+        }
+
+        public FileContentResult ExportToPdf(ListAdmissions admissionsList)
+        {
+            var document = new Document
+            {
+                PageInfo = new PageInfo
+                {
+                    Margin = new MarginInfo(28, 28, 28, 40)
+                }
+            };
+            var pdfPage = document.Pages.Add();
+            Table table = new Table
+            {
+                ColumnWidths = "15% 15% 15% 15% 15% 10% 15%",
+                DefaultCellPadding = new MarginInfo(10,5,10,5),
+                Border = new BorderInfo(BorderSide.All,.5f,Color.Black),
+                DefaultCellBorder = new BorderInfo(BorderSide.All,.2f,Color.Black),
+            };
+
+            DataTable dt = new DataTable();
+            dt.Columns.Add("Date");
+            dt.Columns.Add("Card Number");
+            dt.Columns.Add("Name");
+            dt.Columns.Add("Hospital");
+            dt.Columns.Add("Medical Case");
+            dt.Columns.Add("Estimated Cost");
+            dt.Columns.Add("Status");
+
+            foreach (var admission in admissionsList.Addmissions)
+            {
+                var row = dt.NewRow();
+
+                row["Date"] = admission.StrDate;
+                row["Card Number"] = admission.CardNumber;
+                row["Name"] = admission.Insured;
+                row["Hospital"] = admission.Hospital;
+                row["Medical Case"] = admission.MedicalCase;
+                row["Estimated Cost"] = admission.EstimatedCost;
+                row["Status"] = admission.Status;
+                dt.Rows.Add(row);
             }
 
-                using var stream = new MemoryStream();
-                workbook.SaveAs(stream);
-                var content = stream.ToArray();
+            table.ImportDataTable(dt,true,0,0);
+            document.Pages[1].Paragraphs.Add(table);
 
-            return content;
-            
+            using(var stream = new MemoryStream())
+            {
+                document.Save(stream);
+                return new FileContentResult(stream.ToArray(), "application/pdf")
+                {
+                    FileDownloadName = "Admissions.pdf"
+                };
+            }
         }
     }
 }

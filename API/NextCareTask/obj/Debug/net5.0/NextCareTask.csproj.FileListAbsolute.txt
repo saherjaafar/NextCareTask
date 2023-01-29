@@ -325,3 +325,9 @@ C:\Users\User\Desktop\NextCare Task Repo\NextCareTask\API\NextCareTask\obj\Debug
 C:\Users\User\Desktop\NextCare Task Repo\NextCareTask\API\NextCareTask\obj\Debug\net5.0\NextCareTask.pdb
 C:\Users\User\Desktop\NextCare Task Repo\NextCareTask\API\NextCareTask\obj\Debug\net5.0\NextCareTask.genruntimeconfig.cache
 C:\Users\User\Desktop\NextCare Task Repo\NextCareTask\API\NextCareTask\obj\Debug\net5.0\ref\NextCareTask.dll
+C:\Users\User\Desktop\NextCare Task Repo\NextCareTask\API\NextCareTask\bin\Debug\net5.0\Aspose.PDF.dll
+C:\Users\User\Desktop\NextCare Task Repo\NextCareTask\API\NextCareTask\bin\Debug\net5.0\System.Diagnostics.PerformanceCounter.dll
+C:\Users\User\Desktop\NextCare Task Repo\NextCareTask\API\NextCareTask\bin\Debug\net5.0\System.Drawing.Common.dll
+C:\Users\User\Desktop\NextCare Task Repo\NextCareTask\API\NextCareTask\bin\Debug\net5.0\runtimes\win\lib\netcoreapp2.0\System.Diagnostics.PerformanceCounter.dll
+C:\Users\User\Desktop\NextCare Task Repo\NextCareTask\API\NextCareTask\bin\Debug\net5.0\runtimes\unix\lib\netcoreapp3.0\System.Drawing.Common.dll
+C:\Users\User\Desktop\NextCare Task Repo\NextCareTask\API\NextCareTask\bin\Debug\net5.0\runtimes\win\lib\netcoreapp3.0\System.Drawing.Common.dll
