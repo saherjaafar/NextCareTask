@@ -72,6 +72,8 @@ namespace NextCareTask.Controllers
         public IActionResult ExportToPdf([FromBody] ListAdmissions body)
         {
             var content = _unitOfWork.Admissions.ExportToPdf(body);
+            if (content == null)
+                return StatusCode(500, "There are some packages needs to be downloaded in the server, Please try it locally"); // for the published version
             return content;
         }
 

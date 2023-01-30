@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>DataAccess</id>
+    <version>1.0.0</version>
+    <authors>DataAccess</authors>
+    <description>Package Description</description>
+    <dependencies>
+      <group targetFramework="net5.0">
+        <dependency id="Core" version="1.0.0" exclude="Build,Analyzers" />
+        <dependency id="Aspose.PDF" version="23.1.0" exclude="Build,Analyzers" />
+        <dependency id="ClosedXML" version="0.100.3" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.EntityFrameworkCore" version="5.0.17" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.EntityFrameworkCore.SqlServer" version="5.0.17" exclude="Build,Analyzers" />
+        <dependency id="Serilog.AspNetCore" version="5.0.0" exclude="Build,Analyzers" />
+        <dependency id="Serilog.Enrichers.Environment" version="2.2.0" exclude="Build,Analyzers" />
+        <dependency id="Serilog.Enrichers.Process" version="2.0.2" exclude="Build,Analyzers" />
+        <dependency id="Serilog.Enrichers.Thread" version="3.1.0" exclude="Build,Analyzers" />
+        <dependency id="Serilog.Settings.Configuration" version="3.4.0" exclude="Build,Analyzers" />
+        <dependency id="Serilog.Sinks.MSSqlServer" version="5.8.0" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="C:\Users\User\Desktop\NextCare Task Repo\NextCareTask\API\DataAccess\bin\Release\net5.0\DataAccess.runtimeconfig.json" target="lib\net5.0\DataAccess.runtimeconfig.json" />
+    <file src="C:\Users\User\Desktop\NextCare Task Repo\NextCareTask\API\DataAccess\bin\Release\net5.0\DataAccess.dll" target="lib\net5.0\DataAccess.dll" />
+  </files>
+</package>

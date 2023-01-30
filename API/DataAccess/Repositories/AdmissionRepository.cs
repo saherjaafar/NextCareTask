@@ -8,6 +8,7 @@ using Core.Repositories;
 using Core.ViewModels.Admission;
 using Core.ViewModels.Response;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -232,55 +233,63 @@ namespace DataAccess.Repositories
 
         public FileContentResult ExportToPdf(ListAdmissions admissionsList)
         {
-            var document = new Document
+            try
             {
-                PageInfo = new PageInfo
+                Log.Information("admissions List", admissionsList);
+                var document = new Document
                 {
-                    Margin = new MarginInfo(28, 28, 28, 40)
-                }
-            };
-            var pdfPage = document.Pages.Add();
-            Table table = new Table
-            {
-                ColumnWidths = "15% 15% 15% 15% 15% 10% 15%",
-                DefaultCellPadding = new MarginInfo(10,5,10,5),
-                Border = new BorderInfo(BorderSide.All,.5f,Color.Black),
-                DefaultCellBorder = new BorderInfo(BorderSide.All,.2f,Color.Black),
-            };
-
-            DataTable dt = new DataTable();
-            dt.Columns.Add("Date");
-            dt.Columns.Add("Card Number");
-            dt.Columns.Add("Name");
-            dt.Columns.Add("Hospital");
-            dt.Columns.Add("Medical Case");
-            dt.Columns.Add("Estimated Cost");
-            dt.Columns.Add("Status");
-
-            foreach (var admission in admissionsList.Addmissions)
-            {
-                var row = dt.NewRow();
-
-                row["Date"] = admission.StrDate;
-                row["Card Number"] = admission.CardNumber;
-                row["Name"] = admission.Insured;
-                row["Hospital"] = admission.Hospital;
-                row["Medical Case"] = admission.MedicalCase;
-                row["Estimated Cost"] = admission.EstimatedCost;
-                row["Status"] = admission.Status;
-                dt.Rows.Add(row);
-            }
-
-            table.ImportDataTable(dt,true,0,0);
-            document.Pages[1].Paragraphs.Add(table);
-
-            using(var stream = new MemoryStream())
-            {
-                document.Save(stream);
-                return new FileContentResult(stream.ToArray(), "application/pdf")
-                {
-                    FileDownloadName = "Admissions.pdf"
+                    PageInfo = new PageInfo
+                    {
+                        Margin = new MarginInfo(28, 28, 28, 40)
+                    }
                 };
+                var pdfPage = document.Pages.Add();
+                Table table = new Table
+                {
+                    ColumnWidths = "15% 15% 15% 15% 15% 10% 15%",
+                    DefaultCellPadding = new MarginInfo(10, 5, 10, 5),
+                    Border = new BorderInfo(BorderSide.All, .5f, Color.Black),
+                    DefaultCellBorder = new BorderInfo(BorderSide.All, .2f, Color.Black),
+                };
+
+                DataTable dt = new DataTable();
+                dt.Columns.Add("Date");
+                dt.Columns.Add("Card Number");
+                dt.Columns.Add("Name");
+                dt.Columns.Add("Hospital");
+                dt.Columns.Add("Medical Case");
+                dt.Columns.Add("Estimated Cost");
+                dt.Columns.Add("Status");
+
+                foreach (var admission in admissionsList.Addmissions)
+                {
+                    var row = dt.NewRow();
+
+                    row["Date"] = admission.StrDate;
+                    row["Card Number"] = admission.CardNumber;
+                    row["Name"] = admission.Insured;
+                    row["Hospital"] = admission.Hospital;
+                    row["Medical Case"] = admission.MedicalCase;
+                    row["Estimated Cost"] = admission.EstimatedCost;
+                    row["Status"] = admission.Status;
+                    dt.Rows.Add(row);
+                }
+
+                table.ImportDataTable(dt, true, 0, 0);
+                document.Pages[1].Paragraphs.Add(table);
+
+                using (var stream = new MemoryStream())
+                {
+                    document.Save(stream);
+                    return new FileContentResult(stream.ToArray(), "application/pdf")
+                    {
+                        FileDownloadName = "Admissions.pdf"
+                    };
+                }
+            }
+            catch(Exception ex)
+            {
+                return null;
             }
         }
     }

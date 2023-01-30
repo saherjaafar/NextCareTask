@@ -546,8 +546,7 @@ function Admission() {
     if (admissionId != 0) {
       GetAdmission();
     }
-  }, [admissionId, formData]);
-  console.log("ss");
+  }, [admissionId]);
 
   return (
     <Fragment>
