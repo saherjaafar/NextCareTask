@@ -105,6 +105,7 @@ namespace DataAccess.Repositories
                                  Hospital = new SelectVM { value = ahJoin.Id, label = ahJoin.Name },
                                  Insured = new Core.ViewModels.Insured.PublicInsured
                                  {
+                                     Id = a.Id,
                                      FirstName = aiJoin.FirstName,
                                      LastName = aiJoin.LastName,
                                      DOB = aiJoin.DOB,
@@ -222,7 +223,7 @@ namespace DataAccess.Repositories
                     worksheet.Cell(currentRow, 7).Value = admission.Status;
                 }
 
-                using(var stream = new MemoryStream())
+                using (var stream = new MemoryStream())
                 {
                     workbook.SaveAs(stream);
                     var content = stream.ToArray();
@@ -287,7 +288,7 @@ namespace DataAccess.Repositories
                     };
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return null;
             }

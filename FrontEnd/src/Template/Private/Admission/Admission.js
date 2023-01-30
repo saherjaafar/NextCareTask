@@ -121,7 +121,6 @@ function Admission() {
         });
       })
       .then((Result) => {
-        console.log(Result);
         setFormData({
           CardNumber: Result.CardNumber,
           Insured: {
